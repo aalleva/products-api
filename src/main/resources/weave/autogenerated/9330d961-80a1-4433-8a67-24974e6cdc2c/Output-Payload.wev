@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_9330d961_80a1_4433_8a67_24974e6cdc2c_Output_Payload = Array<{  image: String,   price: Number,   rating: {    rate: Number,     count: Number,     _?: Any  },   description: String,   id: Number,   title: String,   category: String,   _?: Any}>
+

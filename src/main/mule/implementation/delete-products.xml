@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	
+	<flow name="delete-products-flow" doc:id="9a764eb4-a7e2-4b3f-86a1-e3d704692300">
+		<set-variable value="#[attributes.uriParams.productId]" doc:name="+productId" doc:id="3e5ed44f-3056-4044-9205-d1ebdada8378" variableName="productId"/>
+		<ee:transform doc:name="Set Variables" doc:id="ba4d5152-7671-4e13-899d-737e72b7e49d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dw/variables/set-log-object-delete-products-flow.dwl" variableName="logObject" />
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Message Received" doc:id="7f5edffc-d766-4bd8-9c98-e90591ef1670" message="#[${file::dw/logs/message-received.dwl}]" category="delete-products-flow" />
+		<http:request method="DELETE" doc:name="DELETE /products/{productId}" doc:id="53b66190-0020-4522-ae4a-6fdb6e0fd5e9" config-ref="http-request-configuration" path="/products/{productId}">
+			<http:uri-params ><![CDATA[#[${file::dw/mappings/set-productId-uri-params.dwl}]]]></http:uri-params>
+		</http:request>
+		<logger level="INFO" doc:name="Message Processed" doc:id="3a876fb8-75e7-41fd-827e-5e2f103705a4" message="#[${file::dw/logs/message-processed.dwl}]" category="delete-products-flow" />
+	</flow>
+		
+</mule>

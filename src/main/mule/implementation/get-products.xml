@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+
+	<flow name="get-products-flow" doc:id="9330d961-80a1-4433-8a67-24974e6cdc2c">
+		<ee:transform doc:name="Set Variables" doc:id="718e5cc2-fa3a-42a5-bc80-9534523d2af6">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable resource="dw/variables/set-logObject-get-products-flow.dwl" variableName="logObject" />
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Message Received" doc:id="48aab582-a39f-4587-ab03-15c36c880fc4"
+			message="#[${file::dw/logs/message-received.dwl}]" />
+		<http:request method="GET" doc:name="GET /products" doc:id="6115ced2-38e1-4a02-a560-6b89f9763242"
+			config-ref="http-request-configuration" path="/products" targetValue="#[%dw 2.0 output application/json --- payload]" />
+		<logger level="INFO" doc:name="Message Processed" doc:id="93aa4de4-b339-4508-a2b9-b752efdf971e"
+			message="#[${file::dw/logs/message-processed.dwl}]" />
+	</flow>
+
+</mule>

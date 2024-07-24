@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+	<error-handler name="all-error-handler">
+		<on-error-propagate type="APIKIT:BAD_REQUEST" enableNotifications="true" logException="false">
+			<ee:transform doc:name="Map Bad Request Error Message">
+				<ee:message>
+					<ee:set-payload resource="dw/apikit/errors/map-bad-request-error.dwl" />
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[400]]></ee:set-variable>
+					<ee:set-variable resource="dw/variables/set-log-object-apikit-bad-request-error-handler.dwl" variableName="logObject" />
+				</ee:variables>
+			</ee:transform>
+			<logger level="ERROR" doc:name="Message failed" doc:id="9732f90b-e36a-4ac6-8cd1-37488fd6b965" message="#[${file::dw/logs/message-failed.dwl}]"/>
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_FOUND">
+			<ee:transform doc:name="Map Resource Not Found Error Message">
+				<ee:message>
+					<ee:set-payload resource="dw/apikit/errors/map-resource-not-found-error.dwl" />
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+			<ee:transform doc:name="Map Method Not Allowed Error Message">
+				<ee:message>
+					<ee:set-payload resource="dw/apikit/errors/map-method-not-allowed-error.dwl" />
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[405]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+			<ee:transform doc:name="Map Not Acceptable Error Message">
+				<ee:message>
+					<ee:set-payload resource="dw/apikit/errors/map-not-acceptable-error.dwl" />
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[406]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<ee:transform doc:name="Map Unsupported Media Type Error Message">
+				<ee:message>
+					<ee:set-payload resource="dw/apikit/errors/map-unsupported-media-type-error.dwl" />
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[415]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_IMPLEMENTED" enableNotifications="true" logException="true">
+			<ee:transform doc:name="Map Not Implemented Error Message">
+				<ee:message>
+					<ee:set-payload resource="dw/apikit/errors/map-not-implemented-error.dwl" />
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[501]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate type="ANY">
+			<ee:transform doc:name="Map Internal Server Error Message">
+				<ee:message>
+					<ee:set-payload resource="dw/apikit/errors/map-internal-server-error.dwl" />
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[500]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+	</error-handler>
+
+</mule>

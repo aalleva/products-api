@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+
+	<flow name="post-products-flow" doc:id="01eb5eed-2e05-45b4-bb36-d80df86a1e08">
+		<ee:transform doc:name="Set Variables" doc:id="198d8af9-8d82-486a-81d0-94cb2f80301e">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable resource="dw/variables/set-log-object-post-products-flow.dwl" variableName="logObject" />
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Message Received" doc:id="0f493316-a0f4-4963-9955-c07088491c67" category="post-products-flow" message="#[${file::dw/logs/message-received.dwl}]"/>
+		<http:request method="POST" doc:name="POST /products" doc:id="1b59ea67-bfae-4fce-b134-203da94bff6c" config-ref="http-request-configuration" path="/products" target="postProductsResponse"/>
+		<ee:transform doc:name="Map to JSON" doc:id="01a96616-dc1b-4290-ae68-b5e9d223bb48">
+			<ee:message>
+				<ee:set-payload resource="dw/mappings/map-json-response-post-products-flow.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Message Processed" doc:id="89c47b3d-f51e-4c3e-a236-76c3a9a7c65d" category="post-products-flow" message="#[${file::dw/logs/message-processed.dwl}]" />
+	</flow>		
+	
+</mule>

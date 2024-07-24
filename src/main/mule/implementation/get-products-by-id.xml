@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	
+
+	<flow name="get-products-by-id-flow" doc:id="9831165e-2a29-4167-bf1d-4c6c3e89389c">
+		<set-variable value="#[attributes.uriParams.productId]" doc:name="+productId" doc:id="01cefb15-9393-4b04-8f2e-be901ec6588f" variableName="productId"/>
+		<ee:transform doc:name="Set Variables" doc:id="7c780b99-3147-4f5c-9afe-e10038b176c1" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dw/variables/set-log-object-get-products-id-flow.dwl" variableName="logObject" />
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Message Received" doc:id="a3e6e67e-ef90-4aee-b60d-ea10c396b5e6" message="#[${file::dw/logs/message-received.dwl}]"/>
+		<http:request method="GET" doc:name="GET /products/{productId}" doc:id="03f546ed-784e-4d2b-9f9a-a89cf379c9d3" config-ref="http-request-configuration" path="/products/{productId}">
+			<http:uri-params ><![CDATA[#[${file::dw/mappings/set-productId-uri-params.dwl}]]]></http:uri-params>
+		</http:request>
+		<logger level="INFO" doc:name="Message Processed" doc:id="a118fec0-945f-417b-b525-732b5ae3807c" message="#[${file::dw/logs/message-processed.dwl}]"/>	
+	</flow>	
+	
+</mule>

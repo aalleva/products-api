@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+	
+	<global-property doc:name="Global Property" doc:id="58ad0c29-8f49-4a0f-a2e5-7a0179bba8e4" name="mule.env" value="dev" />
+	<configuration-properties doc:name="Configuration properties" doc:id="7391766d-688f-4b0d-99ba-9b4ecf2cd983" file="config/global.yaml" />
+	<configuration-properties doc:name="Configuration properties" doc:id="fcfdfbd9-7fd3-465c-a2cd-52a65b2a92f7" file="config/api.${mule.env}.yaml" />
+	<http:listener-config name="http-listener-config">
+		<http:listener-connection host="${http.host}" port="${http.port}" />
+	</http:listener-config>
+	<http:request-config name="http-request-configuration" doc:name="HTTP Request configuration" doc:id="07659ba8-479f-4d3d-8ef8-3aab20eeaf8c" >
+		<http:request-connection protocol="HTTPS" host="fakestoreapi.com" port="443" />
+	</http:request-config>
+	
+</mule>
