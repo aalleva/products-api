@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
-    
-    <apikit:config name="products-sapi-config" api="resource::a679f308-ca49-4f47-850e-b7fc0b2825bb:products-sapi:1.0.0:raml:zip:products-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+    <apikit:config name="products-sapi-config" api="resource::a679f308-ca49-4f47-850e-b7fc0b2825bb:products-sapi:1.0.1:raml:zip:products-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="77b3a381-1859-404e-85f5-db8d7db0a039" flowRef="products-sapi-main" />
-	<flow name="products-sapi-main">
+    <flow name="products-sapi-main">
         <http:listener config-ref="http-listener-config" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
@@ -15,44 +13,21 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="products-sapi-config" />
-		<error-handler ref="all-error-handler" />
+        <error-handler ref="all-error-handler" />
     </flow>
     <flow name="put:\products\(productId):application\json:products-sapi-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:variables>
-                <ee:set-variable variableName="productId">attributes.uriParams.'productId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: 1,
-  title: "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
-  price: 109.95,
-  description: "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
-  category: "men's clothing",
-  image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
-  rating: {
-    rate: 3.9,
-    count: 120
-  }
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+        <flow-ref doc:name="put-products-flow" name="put-products-flow" />
     </flow>
     <flow name="delete:\products\(productId):products-sapi-config">
-		<flow-ref doc:name="delete-products-flow" doc:id="d11bb609-c2d8-4edd-90eb-d154caabee3c" name="delete-products-flow"/>
+        <flow-ref doc:name="delete-products-flow" doc:id="d11bb609-c2d8-4edd-90eb-d154caabee3c" name="delete-products-flow" />
     </flow>
     <flow name="get:\products:products-sapi-config">
-		<flow-ref doc:name="get-products-flow" doc:id="1c75b380-734e-4c82-853c-41eea0c9e000" name="get-products-flow"/>
+        <flow-ref doc:name="get-products-flow" doc:id="1c75b380-734e-4c82-853c-41eea0c9e000" name="get-products-flow" />
     </flow>
     <flow name="get:\products\(productId):products-sapi-config">
-		<flow-ref doc:name="get-products-by-id-flow" doc:id="9ebdfb0c-ea0b-4019-9545-a2c2a6eb671c" name="get-products-by-id-flow"/>
+        <flow-ref doc:name="get-products-by-id-flow" doc:id="9ebdfb0c-ea0b-4019-9545-a2c2a6eb671c" name="get-products-by-id-flow" />
     </flow>
     <flow name="post:\products:application\json:products-sapi-config">
-		<flow-ref doc:name="post-products-flow" doc:id="c4a168a8-ea79-4cf3-b27a-952e5be86d43" name="post-products-flow"/>
+        <flow-ref doc:name="post-products-flow" doc:id="c4a168a8-ea79-4cf3-b27a-952e5be86d43" name="post-products-flow" />
     </flow>
 </mule>

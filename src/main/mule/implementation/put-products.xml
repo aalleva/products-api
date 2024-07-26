@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+	<flow name="put-products-flow">
+		<set-variable value="#[attributes.uriParams.productId]" doc:name="+productId" doc:id="cb935662-989c-48a9-9d1f-2696de229f4a" variableName="productId"/>
+		<ee:transform doc:name="Set Variables" doc:id="a096b5ce-cc08-4eb0-8d4d-6e270e283ace" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dw/variables/set-log-object-put-products-flow.dwl" variableName="logObject" />
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Message Received" doc:id="03901d2f-7ec1-4349-aa38-6b7631c6a781" category="put-products-flow" message="#[${file::dw/logs/message-received.dwl}]"/>
+		<http:request method="PUT" doc:name="PUT /products/{productId}" doc:id="8b4403bf-0a0a-4d55-b104-87b256cb8be3" config-ref="http-request-configuration" path="/products/{productId}">
+			<http:uri-params ><![CDATA[#[${file::dw/mappings/set-productId-uri-params.dwl}]]]></http:uri-params>
+		</http:request>
+		<logger level="INFO" doc:name="Message Processed" doc:id="1b225707-06e2-47d8-90db-ba2b3fcaf167" category="put-products-flow" message="#[${file::dw/logs/message-processed.dwl}]" />
+	</flow>
+
+</mule>

@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<ee:message>
 			</ee:message>
 			<ee:variables>
-				<ee:set-variable resource="dw/variables/set-logObject-get-products-flow.dwl" variableName="logObject" />
+				<ee:set-variable resource="dw/variables/set-log-object-get-products-flow.dwl" variableName="logObject" />
 			</ee:variables>
 		</ee:transform>
 		<logger level="INFO" doc:name="Message Received" doc:id="48aab582-a39f-4587-ab03-15c36c880fc4"
